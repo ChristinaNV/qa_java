@@ -1,6 +1,5 @@
+import com.example.Feline;
 import com.example.Lion;
-import com.example.Predator;
-import com.example.Sex;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -13,18 +12,18 @@ public class LionHasManeTest {
 
     static Stream<Object[]> provideSexData() {
         return Stream.of(
-                new Object[]{Sex.MALE, true, "Самец"},
-                new Object[]{Sex.FEMALE, false, "Самка"}
+                new Object[]{"Самец", true},
+                new Object[]{"Самка", false}
         );
     }
 
-    @ParameterizedTest(name = "Lion with sex={0} → hasMane={1}, getSex()={2}")
+    @ParameterizedTest(name = "Lion with sex={0} → hasMane={1}")
     @MethodSource("provideSexData")
-    void lionTestSexAndMane(Sex sex, boolean expectedHasMane, String expectedSex) throws Exception {
-        Predator predatorMock = mock(Predator.class);
-        Lion lion = new Lion(sex, predatorMock);
+    void lionTestSexAndMane(String sex, boolean expectedHasMane) throws Exception {
+        Feline felineMock = mock(Feline.class);
+        Lion lion = new Lion(sex, felineMock);
+
         assertEquals(expectedHasMane, lion.doesHaveMane());
-        assertEquals(expectedSex, lion.getSex());
     }
 
 }

@@ -1,6 +1,5 @@
+import com.example.Feline;
 import com.example.Lion;
-import com.example.Predator;
-import com.example.Sex;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -8,6 +7,7 @@ import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class LionGetKittensTest {
 
@@ -20,13 +20,16 @@ public class LionGetKittensTest {
         );
     }
 
-    @ParameterizedTest(name = "Lion with kittens={0} → getKittens()={0}")
+    @ParameterizedTest(name = "Lion should return {0} kittens")
     @MethodSource("provideKittensData")
     void lionTestKittensCount(int kittensCount) throws Exception {
-        Predator predatorMock = mock(Predator.class);
-        Lion lion = new Lion(Sex.MALE, predatorMock, kittensCount);
+        Feline felineMock = mock(Feline.class);
+        when(felineMock.getKittens()).thenReturn(kittensCount);
 
-        assertEquals(kittensCount, lion.getKittens());
+        Lion lion = new Lion("Самец", felineMock);
+        int actualKittens = lion.getKittens();
+
+        assertEquals(kittensCount, actualKittens);
     }
 
 }

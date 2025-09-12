@@ -33,6 +33,12 @@ class CatTest {
     }
 
     @Test
+    void catTestGetSound() {
+        Cat cat = new Cat(new Feline());
+        assertEquals("Мяу", cat.getSound());
+    }
+
+    @Test
     void catTestGetFood() throws Exception {
         List<String> expectedFood = Arrays.asList("Птица", "Животные");
         when(felineMock.eatMeat()).thenReturn(expectedFood);

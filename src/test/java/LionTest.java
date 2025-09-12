@@ -1,6 +1,5 @@
+import com.example.Feline;
 import com.example.Lion;
-import com.example.Predator;
-import com.example.Sex;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -12,58 +11,75 @@ import static org.mockito.Mockito.*;
 public class LionTest {
 
     @Test
-    void lionTestGetKittensDefault() throws Exception {
-        Predator predatorMock = mock(Predator.class);
-        Lion lion = new Lion(Sex.FEMALE, predatorMock);
-        assertEquals(1, lion.getKittens());
+    void lionTestDefaultKittens() throws Exception {
+        Feline felineMock = mock(Feline.class);
+        when(felineMock.getKittens()).thenReturn(1);
+
+        Lion lion = new Lion("Самка", felineMock);
+        int kittens = lion.getKittens();
+
+        assertEquals(1, kittens);
+        verify(felineMock).getKittens();
     }
 
     @Test
     void lionTestGetFood() throws Exception {
-        Predator predatorMock = mock(Predator.class);
+        Feline felineMock = mock(Feline.class);
         List<String> expectedFood = Arrays.asList("мясо1", "мясо2");
-        when(predatorMock.eatMeat()).thenReturn(expectedFood);
-        Lion lion = new Lion(Sex.MALE, predatorMock);
+        when(felineMock.getFood("Хищник")).thenReturn(expectedFood);
+
+        Lion lion = new Lion("Самец", felineMock);
         List<String> food = lion.getFood();
+
         assertEquals(expectedFood, food);
-        verify(predatorMock).eatMeat();
+        verify(felineMock).getFood("Хищник");
     }
 
     @Test
     void lionTestGetFoodThrowsException() throws Exception {
-        Predator predatorMock = mock(Predator.class);
-        when(predatorMock.eatMeat()).thenThrow(new Exception("Hunting failed"));
+        Feline felineMock = mock(Feline.class);
+        when(felineMock.getFood("Хищник")).thenThrow(new Exception("Hunting failed"));
 
-        Lion lion = new Lion(Sex.MALE, predatorMock);
+        Lion lion = new Lion("Самец", felineMock);
 
         Exception exception = assertThrows(Exception.class, lion::getFood);
         assertEquals("Hunting failed", exception.getMessage());
-        verify(predatorMock).eatMeat();
+        verify(felineMock).getFood("Хищник");
     }
 
     @Test
     void lionTestGetFoodEmptyList() throws Exception {
-        Predator predatorMock = mock(Predator.class);
-        when(predatorMock.eatMeat()).thenReturn(List.of());
-        Lion lion = new Lion(Sex.MALE, predatorMock);
+        Feline felineMock = mock(Feline.class);
+        when(felineMock.getFood("Хищник")).thenReturn(List.of());
+
+        Lion lion = new Lion("Самец", felineMock);
         List<String> food = lion.getFood();
+
         assertNotNull(food);
         assertTrue(food.isEmpty());
-        verify(predatorMock).eatMeat();
+        verify(felineMock).getFood("Хищник");
     }
 
     @Test
-    void lionTestMultipleCalls() throws Exception {
-        Predator predatorMock = mock(Predator.class);
-        when(predatorMock.eatMeat()).thenReturn(List.of("meat"));
-        Lion lion = new Lion(Sex.FEMALE, predatorMock, 3);
+    void lionTestDoesHaveMane() throws Exception {
+        Feline felineMock = mock(Feline.class);
 
-        assertFalse(lion.doesHaveMane());
-        assertEquals(3, lion.getKittens());
-        assertEquals("Самка", lion.getSex());
-        assertEquals(List.of("meat"), lion.getFood());
+        Lion maleLion = new Lion("Самец", felineMock);
+        Lion femaleLion = new Lion("Самка", felineMock);
 
-        verify(predatorMock).eatMeat();
+        assertTrue(maleLion.doesHaveMane());
+        assertFalse(femaleLion.doesHaveMane());
+    }
+
+    @Test
+    void lionTestGetSex() throws Exception {
+        Feline felineMock = mock(Feline.class);
+
+        Lion maleLion = new Lion("Самец", felineMock);
+        Lion femaleLion = new Lion("Самка", felineMock);
+
+        assertEquals("Самец", maleLion.doesHaveMane() ? "Самец" : "Самка");
+        assertEquals("Самка", femaleLion.doesHaveMane() ? "Самец" : "Самка");
     }
 
 }

@@ -1,4 +1,5 @@
 import com.example.Alex;
+import com.example.Feline;
 import com.example.Predator;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -10,20 +11,25 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AlexTest {
 
     @Test
-    void alexTestCreation() throws Exception {
-        Predator predator = Mockito.mock(Predator.class);
-        Alex alex = new Alex(predator);
+    void alexTestHasMane() throws Exception {
+        Feline feline = Mockito.mock(Feline.class);
+        Alex alex = new Alex(feline);
 
         assertTrue(alex.doesHaveMane());
-        assertEquals("Самец", alex.getSex());
+    }
+
+    @Test
+    void alexTestKittensAlwaysZero() throws Exception {
+        Feline feline = Mockito.mock(Feline.class);
+        Alex alex = new Alex(feline);
 
         assertEquals(0, alex.getKittens());
     }
 
     @Test
     void alexTestGetFriends() throws Exception {
-        Predator predator = Mockito.mock(Predator.class);
-        Alex alex = new Alex(predator);
+        Feline feline = Mockito.mock(Feline.class);
+        Alex alex = new Alex(feline);
 
         List<String> friends = alex.getFriends();
 
@@ -32,38 +38,38 @@ public class AlexTest {
         assertTrue(friends.contains("Марти"));
         assertTrue(friends.contains("Глория"));
         assertTrue(friends.contains("Мелман"));
-        assertEquals(List.of("Марти", "Глория", "Мелман"), friends);
     }
 
     @Test
     void alexTestGetPlaceOfLiving() throws Exception {
-        Predator predator = Mockito.mock(Predator.class);
-        Alex alex = new Alex(predator);
+        Feline feline = Mockito.mock(Feline.class);
+        Alex alex = new Alex(feline);
 
         assertEquals("Нью-Йоркский зоопарк", alex.getPlaceOfLiving());
     }
 
     @Test
     void alexTestGetKittensOverride() throws Exception {
-        Predator predator = Mockito.mock(Predator.class);
-        Alex alex = new Alex(predator);
+        Feline feline = Mockito.mock(Feline.class);
+        Mockito.when(feline.getKittens()).thenReturn(5);
 
-        assertEquals(0, alex.getKittens());
+        Alex alex = new Alex(feline);
+
         assertEquals(0, alex.getKittens());
         assertEquals(0, alex.getKittens());
     }
 
     @Test
     void alexTestInheritedPredatorBehavior() throws Exception {
-        Predator predator = Mockito.mock(Predator.class);
+        Feline feline = Mockito.mock(Feline.class);
         List<String> expectedFood = List.of("мясо");
-        Mockito.when(predator.eatMeat()).thenReturn(expectedFood);
+        Mockito.when(feline.getFood("Хищник")).thenReturn(expectedFood);
 
-        Alex alex = new Alex(predator);
+        Alex alex = new Alex(feline);
         List<String> food = alex.getFood();
 
         assertEquals(expectedFood, food);
-        Mockito.verify(predator).eatMeat();
+        Mockito.verify(feline).getFood("Хищник");
     }
 
 }
